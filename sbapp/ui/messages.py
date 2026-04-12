@@ -70,7 +70,7 @@ def _add_url_refs(text: str) -> str:
     """
     if "[ref=" in text:
         return text
-    return _url_pattern.sub(r"[ref=\1]\1[/ref]", text)
+    return _url_pattern.sub(r"[u][ref=\1]\1[/ref][/u]", text)
 
 
 class DialogItem(OneLineIconListItem):
