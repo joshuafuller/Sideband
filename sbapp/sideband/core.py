@@ -849,10 +849,9 @@ class SidebandCore():
                             plugin_globals["SidebandTelemetryPlugin"] = SidebandTelemetryPlugin
                             RNS.log("Loading plugin \""+str(file)+"\"", RNS.LOG_NOTICE)
                             plugin_path = os.path.join(plugins_path, file)
-                            try:
-                                exec(open(plugin_path).read(), plugin_globals)
+                            try: exec(open(plugin_path).read(), plugin_globals)
                             except Exception as e:
-                                RNS.log("Error loading plugin \""+str(file)+"\": "+str(e), RNS.LOG_ERROR)
+                                RNS.log(f"Error loading plugin \"{file}\": {e}", RNS.LOG_ERROR)
                                 continue
                             plugin_class = plugin_globals["plugin_class"]
                             
