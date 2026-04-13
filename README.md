@@ -84,6 +84,11 @@ pamac install python-pyaudio opusfile codec2 xclip xsel
 # For Arch and derivatives
 sudo pacman -Sy python-pyaudio opusfile codec2 xclip xsel
 
+# Clipboard support on Wayland: If the clipboard is not
+# working correctly on Wayland with xclip and xsel, you
+# can install wl-clipboard and wl-clipboard-x11 instead.
+pamac remove xclip xsel
+pamac install wl-clipboard wl-clipboard-x11
 ```
 
 Once those are installed, install the Sideband application itself:
