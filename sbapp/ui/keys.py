@@ -37,6 +37,10 @@ class Keys():
             self.keys_screen.ids.keys_info.text = info1
             self.keys_screen.ids.backup_info.text = info2
 
+    def test_a(self, sender):
+        RNS.log("TEST ACTION");
+        RNS.log(self)
+        RNS.log(self.app)
 
     def _profile_backup_job(self):
         import tarfile
@@ -160,10 +164,10 @@ MDScreen:
             anchor_title: "left"
             elevation: 0
             left_action_items:
-                [['menu', lambda x: root.app.nav_drawer.set_state("open")]]
+                [['menu', lambda x: root.app.app.nav_drawer.set_state("open")]]
             right_action_items:
                 [
-                ['close', lambda x: root.app.close_keys_action(self)],
+                ['close', lambda x: root.app.app.close_keys_action(self)],
                 ]
 
         ScrollView:
