@@ -29,7 +29,11 @@ def python314_kivy_patch():
     contents = None
 
     target_path = f"{spec.submodule_search_locations[0]}/lang/parser.py"
-    with open(target_path, "rb") as fh: contents = fh.read().decode("utf-8")
+    try:
+        with open(target_path, "rb") as fh: contents = fh.read().decode("utf-8")
+    except Exception as e:
+        print(f"Error while reading Kivy's lang parser file: {e}")
+
     if not contents: fail_patch()
     contents = contents.replace("\r\n", "\n")
 
