@@ -59,19 +59,8 @@ _url_pattern = re.compile(r"(https?://[^\s\]]+|www\.[^\s\]]+)")
 
 
 def _add_url_refs(text: str) -> str:
-    """Wrap plain URLs in Kivy [ref] markup.
-
-    - Supports links like:
-        * http://example.com
-        * https://example.com
-        * www.example.com
-    - If the text already contains [ref=...] markup, leave it untouched to
-      avoid double-wrapping existing references.
-    """
-    if "[ref=" in text:
-        return text
+    if "[ref=" in text: return text
     return _url_pattern.sub(r"[u][ref=\1]\1[/ref][/u]", text)
-
 
 class DialogItem(OneLineIconListItem):
     divider = None
