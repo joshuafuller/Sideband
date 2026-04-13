@@ -75,7 +75,6 @@ def get_display_res():
             RNS.trace_exception(e)
             return None, None
 
-
 def apply_ui_scale():
     global app_ui_scaling_path
     global app_ui_wcfg_path
@@ -148,6 +147,15 @@ def apply_ui_scale():
 
         except Exception as e:
             RNS.log(f"Error while reading saved window configuration: {e}", RNS.LOG_ERROR)
+
+###################################################
+# Run-time patch to fix broken Kivy on Python 3.14
+# until a Kivy release is made that actually works.
+#
+if sys.version_info[0] >= 3 and sys.version_info[1] >= 14:
+    if RNS.vendor.platformutils.is_linux():
+        from .compat import python314_kivy_patch
+        python314_kivy_patch()
 
 ###################################################
 # Kivy/SDL2 run-time patch to fix horribly slow
