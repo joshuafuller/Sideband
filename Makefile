@@ -79,6 +79,7 @@ prepare_win_pkg: clean build_spkg
 	rm build/winpkg/sbapp/buildozer.spec
 	cp winbuild.bat build/
 	mv build/winpkg build/sideband_sources
+	chmod -R a+rw build/sideband_sources
 	cd build; zip -r winbuild.zip sideband_sources winbuild.bat
 	mv build/winbuild.zip dist/winbuild.zip
 
