@@ -38,6 +38,11 @@ def python314_kivy_patch():
         print("Patching Kivy for Python 3.14 compatibility...")
         contents = contents.replace(kivy_target_1, kivy_patch_1)
         if not kivy_patch_1 in contents: fail_patch()
-        with open(target_path, "wb") as fh:
-            fh.write(contents.encode("utf-8"))
-            print("Kivy successfully patched for Python 3.14 compatibility")
+        try:
+            with open(target_path, "wb") as fh:
+                fh.write(contents.encode("utf-8"))
+                print("Kivy successfully patched for Python 3.14 compatibility")
+        
+        except Exception as e:
+            print(f"Error while patching Kivy: {e}")
+            fail_patch()
