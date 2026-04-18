@@ -1,6 +1,6 @@
 __debug_build__ = False
 __disable_shaders__ = False
-__version__ = "1.9.0"
+__version__ = "1.9.1"
 __variant__ = ""
 
 import sys
@@ -483,6 +483,7 @@ else:
         from .ui.hardware import Hardware
         from .ui.objectdetails import ObjectDetails
         from .ui.messages import Messages, ts_format, messages_screen_kv
+        # from .ui.messages_recycle import Messages, ts_format, messages_screen_kv
         from .ui.helpers import ContentNavigationDrawer, DrawerList, IconListItem
         from .ui.helpers import multilingual_markup, mdc, dark_theme_text_color
 
