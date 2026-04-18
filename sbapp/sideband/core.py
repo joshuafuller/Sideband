@@ -580,10 +580,8 @@ class SidebandCore():
                 total += entry.stat(follow_symlinks=False).st_size
         return total
 
-    def should_persist_data(self):
-        if self.reticulum != None:
-            self.reticulum._should_persist_data()
-
+    def should_persist_data(self, background=False):
+        if self.reticulum != None: self.reticulum._should_persist_data(background=background)
         self.save_configuration()
 
     def __load_telemetry_collector_excluded(self):
