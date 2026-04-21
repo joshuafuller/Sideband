@@ -2999,19 +2999,32 @@ class SidebandCore():
         with self.db_lock:
             db = self.__db_connect()
             dbc = db.cursor()
-            
+
+            base_condition = "(dest=:context_dest or source=:context_dest)"
             if after != None and before == None:
-                query = "select * from lxm where (dest=:context_dest or source=:context_dest) and rx_ts>:after_ts"
-                dbc.execute(query, {"context_dest": context_dest, "after_ts": after})
+                query = f"select * from lxm where {base_condition} and rx_ts>:after_ts ORDER BY rx_ts DESC"
+                params = {"context_dest": context_dest, "after_ts": after}
+                if limit is not None:
+                    query += f" LIMIT :limit_val"; params["limit_val"] = int(limit)
+                dbc.execute(query, params)
             elif after == None and before != None:
-                query = "select * from lxm where (dest=:context_dest or source=:context_dest) and rx_ts<:before_ts"
-                dbc.execute(query, {"context_dest": context_dest, "before_ts": before})
+                query = f"select * from lxm where {base_condition} and rx_ts<:before_ts ORDER BY rx_ts DESC"
+                params = {"context_dest": context_dest, "before_ts": before}
+                if limit is not None:
+                    query += f" LIMIT :limit_val"; params["limit_val"] = int(limit)
+                dbc.execute(query, params)
             elif after != None and before != None:
-                query = "select * from lxm where (dest=:context_dest or source=:context_dest) and rx_ts<:before_ts and rx_ts>:after_ts"
-                dbc.execute(query, {"context_dest": context_dest, "before_ts": before, "after_ts": after})
+                query = f"select * from lxm where {base_condition} and rx_ts<:before_ts and rx_ts>:after_ts ORDER BY rx_ts DESC"
+                params = {"context_dest": context_dest, "before_ts": before, "after_ts": after}
+                if limit is not None:
+                    query += f" LIMIT :limit_val"; params["limit_val"] = int(limit)
+                dbc.execute(query, params)
             else:
-                query = "select * from lxm where dest=:context_dest or source=:context_dest"
-                dbc.execute(query, {"context_dest": context_dest})
+                query = f"select * from lxm where {base_condition} ORDER BY rx_ts DESC"
+                params = {"context_dest": context_dest}
+                if limit is not None:
+                    query += f" LIMIT :limit_val"; params["limit_val"] = int(limit)
+                dbc.execute(query, params)
 
             result = dbc.fetchall()
 
@@ -3034,10 +3047,8 @@ class SidebandCore():
                         lxm.paper_packed = paper_packed_lxm
 
                     extras = None
-                    try:
-                        extras = msgpack.unpackb(entry[11])
-                    except:
-                        pass
+                    try: extras = msgpack.unpackb(entry[11])
+                    except: pass
                     
                     message = {
                         "hash": lxm.hash,
@@ -3054,8 +3065,9 @@ class SidebandCore():
                     }
 
                     messages.append(message)
-                if len(messages) > limit:
-                    messages = messages[-limit:]
+
+                messages.reverse()
+                if len(messages) > limit: messages = messages[-limit:]
                 return messages
 
     def _db_save_lxm(self, lxm, context_dest, originator = False, own_command = False, is_retry = False):

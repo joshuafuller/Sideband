@@ -449,6 +449,7 @@ else:
         from ui.objectdetails import ObjectDetails
         from ui.announces import Announces
         from ui.messages import Messages, ts_format, messages_screen_kv
+        # from ui.messages_recycle import Messages, ts_format, messages_screen_kv
         from ui.helpers import ContentNavigationDrawer, DrawerList, IconListItem
         from ui.helpers import multilingual_markup, mdc, dark_theme_text_color
         from kivymd.toast import toast

@@ -271,8 +271,7 @@ class Messages():
         else:                self.hide_widget(self.ids.message_ptt, True)
 
         c_ts = time.time()
-        if len(self.new_messages) > 0:
-            self.update_widget()
+        if len(self.new_messages) > 0: self.update_widget()
 
         if (len(self.added_item_hashes) < self.db_message_count) and not self.load_more_button in self.list.children:
             self.list.add_widget(self.load_more_button, len(self.list.children))
