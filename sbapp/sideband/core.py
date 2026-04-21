@@ -957,10 +957,8 @@ class SidebandCore():
 
     def log_announce(self, dest, app_data, dest_type, stamp_cost=None, link_stats=None):
         try:
-            if app_data == None:
-                app_data = b""
-            if type(app_data) != bytes:
-                app_data = msgpack.packb([app_data, stamp_cost])
+            if app_data == None: app_data = b""
+            if type(app_data) != bytes: app_data = msgpack.packb([app_data, stamp_cost])
             RNS.log("Received "+str(dest_type)+" announce for "+RNS.prettyhexrep(dest), RNS.LOG_DEBUG)
             self._db_save_announce(dest, app_data, dest_type, link_stats)
             self.setstate("app.flags.new_announces", True)
@@ -3418,14 +3416,10 @@ class SidebandCore():
     def is_known(self, dest_hash):
         try:
             source_identity = RNS.Identity.recall(dest_hash)
+            if source_identity: return True
+            else:               return False
 
-            if source_identity:
-                return True
-            else:
-                return False
-
-        except Exception as e:
-            return False
+        except Exception as e: return False
 
     def request_key(self, dest_hash):
         try:
