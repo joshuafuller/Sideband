@@ -90,10 +90,10 @@ class PropagationNodeDetector():
                         pass
 
                 else:
-                    RNS.log(f"Received malformed propagation node announce from {RNS.prettyhexrep(destination_hash)} with data: {app_data}", RNS.LOG_EXTREME)
+                    RNS.log(f"Received malformed propagation node announce from {RNS.prettyhexrep(destination_hash)}", RNS.LOG_EXTREME)
 
             else:
-                RNS.log(f"Received malformed propagation node announce from {RNS.prettyhexrep(destination_hash)} with data: {app_data}", RNS.LOG_EXTREME)
+                RNS.log(f"Received malformed propagation node announce from {RNS.prettyhexrep(destination_hash)}", RNS.LOG_EXTREME)
 
         except Exception as e:
             RNS.log("Error while processing received propagation node announce: "+str(e))
@@ -371,8 +371,9 @@ class SidebandCore():
         self.active_propagation_node = None
         self.propagation_detector = PropagationNodeDetector(self)
 
-        RNS.Transport.register_announce_handler(self)
-        RNS.Transport.register_announce_handler(self.propagation_detector)
+        if self.is_service or self.is_standalone:
+            RNS.Transport.register_announce_handler(self)
+            RNS.Transport.register_announce_handler(self.propagation_detector)
 
         self.active_command_plugins = {}
         self.active_service_plugins = {}
@@ -806,8 +807,7 @@ class SidebandCore():
     def __save_config(self, no_thread=False):
         RNS.log("Saving Sideband configuration...", RNS.LOG_DEBUG)
         def save_function():
-            while self.saving_configuration:
-                time.sleep(0.15)
+            while self.saving_configuration: time.sleep(0.15)
             try:
                 self.saving_configuration = True
                 with open(self.config_path, "wb") as config_file: config_file.write(msgpack.packb(self.config))
@@ -826,8 +826,8 @@ class SidebandCore():
         if no_thread: save_function()
         else:         threading.Thread(target=save_function, daemon=True).start()
 
-        if self.is_client:
-            self.setstate("wants.settings_reload", True)
+        if self.is_client: self.setstate("wants.settings_reload", True)
+        RNS.log("Sideband configuration saved", RNS.LOG_DEBUG)
 
     def __load_plugins(self):
         plugins_path = self.config["command_plugins_path"]

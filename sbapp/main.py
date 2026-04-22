@@ -1064,7 +1064,7 @@ class SidebandApp(MDApp):
             self.sideband.setstate("app.running", True)
             self.sideband.setstate("app.foreground", False)
             self.app_state = SidebandApp.PAUSED
-            self.sideband.should_persist_data(background=True)
+            self.sideband.should_persist_data(background=False)
             RNS.log("App paused", RNS.LOG_DEBUG)
             return True
         
