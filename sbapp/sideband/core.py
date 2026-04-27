@@ -3279,42 +3279,31 @@ class SidebandCore():
 
     def update_telemetry(self):
         try:
-            try:
-                latest_telemetry = deepcopy(self.latest_telemetry)
-            except:
-                latest_telemetry = None
+            try: latest_telemetry = deepcopy(self.latest_telemetry)
+            except: latest_telemetry = None
 
             telemetry = self.get_telemetry()
             packed_telemetry = self.get_packed_telemetry()
             telemetry_changed = False
 
             if telemetry != None and packed_telemetry != None:
-                if latest_telemetry == None or len(telemetry) != len(latest_telemetry):
-                    telemetry_changed = True
+                if latest_telemetry == None or len(telemetry) != len(latest_telemetry): telemetry_changed = True
 
                 if latest_telemetry != None:
-
                     if not telemetry_changed:
                         for sn in telemetry:
-                            if telemetry_changed:
-                                break
+                            if telemetry_changed: break
 
                             if sn != "time":
                                 if sn in latest_telemetry:
-                                    if telemetry[sn] != latest_telemetry[sn]:
-                                        telemetry_changed = True
-                                else:
-                                    telemetry_changed = True
+                                    if telemetry[sn] != latest_telemetry[sn]: telemetry_changed = True
+                                else: telemetry_changed = True
 
                     if not telemetry_changed:
                         for sn in latest_telemetry:
-
-                            if telemetry_changed:
-                                break
-
+                            if telemetry_changed: break
                             if sn != "time":
-                                if not sn in telemetry:
-                                    telemetry_changed = True
+                                if not sn in telemetry: telemetry_changed = True
 
                 if telemetry_changed:
                     self.telemetry_changes += 1
@@ -3323,10 +3312,8 @@ class SidebandCore():
                     self.setstate("app.flags.last_telemetry", time.time())
 
                     if self.is_client:
-                        try:
-                            self.service_set_latest_telemetry(self.latest_telemetry, self.latest_packed_telemetry)
-                        except Exception as e:
-                            RNS.log("Error while sending latest telemetry to service: "+str(e), RNS.LOG_ERROR)
+                        try: self.service_set_latest_telemetry(self.latest_telemetry, self.latest_packed_telemetry)
+                        except Exception as e: RNS.log("Error while sending latest telemetry to service: "+str(e), RNS.LOG_ERROR)
 
         except Exception as e:
             import traceback
